@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "log-forensics"
+version = "0.1.0"
+description = "Detector de ataques em logs de autenticação (brute-force SSH, user scanning, root login)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Diogo Damasceno", email = "mitszukyo@gmail.com" },
+]
+keywords = ["security", "forensics", "ssh", "logs", "defensive"]
+
+[project.scripts]
+logforensics = "logforensics.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
