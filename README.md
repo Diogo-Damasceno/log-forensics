@@ -4,63 +4,47 @@ Ferramenta defensiva de linha de comando que analisa logs de autenticação
 (estilo `/var/log/auth.log`) e detecta tentativas de ataque, agregando
 estatísticas e indicadores **por endereço IP**.
 
-## O que detecta
-
 - **Brute-force SSH** — muitas ocorrências de `Failed password` de um mesmo IP.
 - **Scanning de usuários** — tentativas contra múltiplos usuários inválidos.
-- **Root login** — tentativas/aceites de login como `root`.
+- **Root login** — tentativas de login direto como root.
 
-## ⚠️ Aviso ético
-
-Esta é uma ferramenta **defensiva e educacional**, voltada à análise de logs
-de sistemas **de sua propriedade ou nos quais você tenha autorização** para
-investigar. Não a utilize para monitorar sistemas de terceiros sem
-permissão. O autor não se responsabiliza por uso indevido.
-
-## Requisitos
-
-- Python 3.10+
-- Apenas biblioteca padrão (sem dependências externas).
+> ⚠️ Ferramenta **educacional e defensiva**. Use em logs de sistemas seus ou
+> sob sua responsabilidade. Não aponte contra terceiros sem autorização.
 
 ## Instalação
 
+Pré-requisitos: **Python 3.10+**.
+
 ```bash
+git clone https://github.com/Diogo-Damasceno/log-forensics.git
+cd log-forensics
+python3 -m venv .venv
+. .venv/bin/activate
 pip install -e .
 ```
 
+Após instalar, o comando do projeto fica disponível dentro do venv.
+Para usar fora dele, crie um atalho:
+
+```bash
+mkdir -p ~/.local/bin
+ln -sf "$(pwd)/.venv/bin/logforensics" ~/.local/bin/logforensics
+```
+
+> Dica: se `~/.local/bin` não estiver no teu `PATH`, rode
+> `export PATH="$HOME/.local/bin:$PATH"` (e adicione ao `~/.bashrc`/`~/.zshrc`).
+
+
 ## Uso
 
-A partir de um arquivo de log:
-
 ```bash
+# analisa um log de auth (SSH)
 logforensics /var/log/auth.log
-```
 
-Lendo de stdin (exemplo com um log de exemplo):
-
-```bash
-cat auth.log | logforensics
-```
-
-Com limiar personalizado de brute-force e saída JSON:
-
-```bash
-logforensics auth.log --threshold 10 --json
-```
-
-## Saída
-
-- Modo texto: resumo por IP (falhas de senha, usuários inválidos, root
-  login, usuários testados) e lista de indicadores de ataque.
-- Modo `--json`: relatório estruturado com `per_ip`, `indicators` e o
-  limiar utilizado.
-
-## Testes
-
-```bash
-pytest
+# lê da entrada padrão (útil com journalctl)
+sudo journalctl -u sshd --no-pager | logforensics -
 ```
 
 ## Licença
 
-MIT — Copyright (c) 2026 Diogo Damasceno.
+MIT — veja `LICENSE`.
