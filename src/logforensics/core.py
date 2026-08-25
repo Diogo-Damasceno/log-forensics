@@ -5,16 +5,16 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 
-# Padrões típicos de /var/log/auth.log (syslog-style)
+
 RE_FAILED = re.compile(r"Failed password for .* from (?P<ip>\d+\.\d+\.\d+\.\d+)")
 RE_INVALID = re.compile(r"Failed password for invalid user (?P<user>\S+) from (?P<ip>\d+\.\d+\.\d+\.\d+)")
 RE_ROOT_LOGIN = re.compile(r"root login .*?(?:from |for )(?P<ip>\d+\.\d+\.\d+\.\d+)")
 
-# Limiares padrão para classificação de indicadores
+
 DEFAULT_BRUTEFORCE_THRESHOLD = 5
 USER_SCAN_THRESHOLD = 3
 
-# Contadores mantidos por IP
+
 STAT_FAILED = "failed_password"
 STAT_INVALID = "invalid_user"
 STAT_ROOT = "root_login"
